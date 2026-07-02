@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import { useEffect, useState } from 'react';
+import { getMensagens } from './services/mensagens';
+import MensagemForm from './components/MensagemForm';
+import MensagemTable from './components/MensagemTable';
+const App = () => {
+  const [mensagens, setMensagens] = useState([]);
+  const fetchMensagens = async () => {
+    const response = await getMensagens();
+    setMensagens(response.data);
+  };
+  useEffect(() => {
+    fetchMensagens();
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className="container">
+        <MensagemForm onSuccess={fetchMensagens} />
+        <div className="mt-4">
+          <MensagemTable mensagens={mensagens} />
+        </div>
+      </div>
+    </>
   );
-}
-
+};
 export default App;
